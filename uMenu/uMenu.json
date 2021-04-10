@@ -9,6 +9,8 @@
     "process_category": 0,
     "pool_partition": 0,
     "is_64_bit": true,
+    "system_resource_size": "0",
+    "disable_device_address_space_merge": true,
     "address_space_type": 1,
     "is_retail": true,
     "filesystem_access": {

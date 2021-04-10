@@ -1,4 +1,10 @@
 
+ifeq ($(strip $(DEVKITPRO)),)
+$(error "Please set DEVKITPRO in your environment. export DEVKITPRO=<path to>devkitPro)
+endif
+
+include $(DEVKITPRO)/devkitA64/base_tools
+
 export UL_MAJOR	:=	0
 export UL_MINOR	:=	3
 export UL_MICRO :=	0

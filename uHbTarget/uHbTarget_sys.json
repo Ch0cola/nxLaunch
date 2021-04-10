@@ -10,6 +10,8 @@
 	"is_retail":	true,
 	"pool_partition":	2,
 	"is_64_bit":	true,
+	"system_resource_size": "0",
+	"disable_device_address_space_merge": true,
 	"address_space_type":	1,
 	"filesystem_access":	{
 		"permissions":	"0xFFFFFFFFFFFFFFFF"
