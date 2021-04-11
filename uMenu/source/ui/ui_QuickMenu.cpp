@@ -31,7 +31,7 @@ namespace ui {
 
         opt_item = pu::ui::elm::MenuItem::New("Power options");
         opt_item->SetIcon(cfg::GetAssetByTheme(g_Theme, "ui/PowerIcon.png"));
-        opt_item->AddOnClick(&actions::ShowPowerDialog);
+        opt_item->AddOnClick(&actions::ShowPowerMenu);
         opt_item->SetColor(textclr);
         this->options_menu->AddItem(opt_item);
 

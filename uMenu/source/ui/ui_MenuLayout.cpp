@@ -29,84 +29,56 @@ namespace ui {
         this->bgSuspendedRaw = RawData::New(0, 0, raw, 1280, 720, 4);
         this->Add(this->bgSuspendedRaw);
 
-        // Load banners first
-        this->topMenuImage = pu::ui::elm::Image::New(40, 35, cfg::GetAssetByTheme(g_Theme, "ui/TopMenu.png"));
-        g_MenuApplication->ApplyConfigForElement("main_menu", "top_menu_bg", this->topMenuImage);
-        this->Add(this->topMenuImage);
+        // Load UI shadows first
+        this->topBar = pu::ui::elm::Image::New(80, 0, cfg::GetAssetByTheme(g_Theme, "ui/Topbar.png"));
+        g_MenuApplication->ApplyConfigForElement("main_menu", "topbar_bg", this->topBar);
+        this->Add(this->topBar);
 
-        this->bannerImage = pu::ui::elm::Image::New(0, 585, cfg::GetAssetByTheme(g_Theme, "ui/BannerInstalled.png"));
+        this->bannerImage = pu::ui::elm::Image::New(80, 610, cfg::GetAssetByTheme(g_Theme, "ui/BannerInstalled.png"));
         g_MenuApplication->ApplyConfigForElement("main_menu", "banner_image", this->bannerImage);
         this->Add(this->bannerImage);
 
         // Then load buttons and other UI elements
-        this->logo = ClickableImage::New(610, 13 + 35, "romfs:/Logo.png");
-        this->logo->SetWidth(60);
-        this->logo->SetHeight(60);
-        this->logo->SetOnClick(&actions::ShowAboutDialog);
-        g_MenuApplication->ApplyConfigForElement("main_menu", "logo_icon", this->logo, false); // Sorry theme makers... logo must be visible, but can be moved
-        this->Add(this->logo);
-
-        this->connIcon = pu::ui::elm::Image::New(80, 53, cfg::GetAssetByTheme(g_Theme, "ui/NoConnectionIcon.png"));
+        this->connIcon = pu::ui::elm::Image::New(90, 5, cfg::GetAssetByTheme(g_Theme, "ui/NoConnectionIcon.png"));
         g_MenuApplication->ApplyConfigForElement("main_menu", "connection_icon", this->connIcon);
         this->Add(this->connIcon);
-        this->users = ClickableImage::New(270, 53, ""); // On layout creation, no user is still selected...
-        this->users->SetOnClick(&actions::ShowUserMenu);
-        g_MenuApplication->ApplyConfigForElement("main_menu", "user_icon", this->users);
-        this->Add(this->users);
-        this->controller = ClickableImage::New(340, 53, cfg::GetAssetByTheme(g_Theme, "ui/ControllerIcon.png"));
-        this->controller->SetOnClick(&actions::ShowControllerSupport);
-        g_MenuApplication->ApplyConfigForElement("main_menu", "controller_icon", this->controller);
-        this->Add(this->controller);
 
         auto curtime = os::GetCurrentTime();
-        this->timeText = pu::ui::elm::TextBlock::New(515, 68, curtime);
+        this->timeText = pu::ui::elm::TextBlock::New(125, 10, curtime);
+        this->timeText->SetFont("DefaultFont@20");
         this->timeText->SetColor(textclr);
         g_MenuApplication->ApplyConfigForElement("main_menu", "time_text", this->timeText);
         this->Add(this->timeText);
+
         auto lvl = os::GetBatteryLevel();
         auto lvlstr = std::to_string(lvl) + "%";
-        this->batteryText = pu::ui::elm::TextBlock::New(700, 55, lvlstr);
+        this->batteryText = pu::ui::elm::TextBlock::New(1185, 11, lvlstr);
+        this->batteryText->SetFont("DefaultFont@18");
         this->batteryText->SetColor(textclr);
         g_MenuApplication->ApplyConfigForElement("main_menu", "battery_text", this->batteryText);
+
         this->Add(this->batteryText);
-        this->batteryIcon = pu::ui::elm::Image::New(700, 80, cfg::GetAssetByTheme(g_Theme, "ui/BatteryNormalIcon.png"));
+        this->batteryIcon = pu::ui::elm::Image::New(1240, 5, cfg::GetAssetByTheme(g_Theme, "ui/BatteryNormalIcon.png"));
         g_MenuApplication->ApplyConfigForElement("main_menu", "battery_icon", this->batteryIcon);
         this->Add(this->batteryIcon);
-
-        this->settings = ClickableImage::New(880, 53, cfg::GetAssetByTheme(g_Theme, "ui/SettingsIcon.png"));
-        this->settings->SetOnClick(&actions::ShowSettingsMenu);
-        g_MenuApplication->ApplyConfigForElement("main_menu", "settings_icon", this->settings);
-        this->Add(this->settings);
-        this->themes = ClickableImage::New(950, 53, cfg::GetAssetByTheme(g_Theme, "ui/ThemesIcon.png"));
-        this->themes->SetOnClick(&actions::ShowThemesMenu);
-        g_MenuApplication->ApplyConfigForElement("main_menu", "themes_icon", this->themes);
-        this->Add(this->themes);
-
-        this->fwText = pu::ui::elm::TextBlock::New(1140, 68, os::GetFirmwareVersion());
-        this->fwText->SetColor(textclr);
-        g_MenuApplication->ApplyConfigForElement("main_menu", "firmware_text", this->fwText);
-        this->Add(this->fwText);
 
         this->menuToggle = ClickableImage::New(520, 200, cfg::GetAssetByTheme(g_Theme, "ui/ToggleClick.png"));
         this->menuToggle->SetOnClick(std::bind(&MenuLayout::menuToggle_Click, this));
         g_MenuApplication->ApplyConfigForElement("main_menu", "menu_toggle_button", this->menuToggle);
         this->Add(this->menuToggle);
 
-        this->itemName = pu::ui::elm::TextBlock::New(40, 610, "A");
+        this->itemName = pu::ui::elm::TextBlock::New(100, 635, "A");
         this->itemName->SetFont("DefaultFont@30");
         this->itemName->SetColor(textclr);
         g_MenuApplication->ApplyConfigForElement("main_menu", "banner_name_text", this->itemName);
         this->Add(this->itemName);
-        this->itemAuthor = pu::ui::elm::TextBlock::New(45, 650, "A");
-        this->itemAuthor->SetFont("DefaultFont@20");
-        this->itemAuthor->SetColor(textclr);
-        g_MenuApplication->ApplyConfigForElement("main_menu", "banner_author_text", this->itemAuthor);
-        this->Add(this->itemAuthor);
-        this->itemVersion = pu::ui::elm::TextBlock::New(45, 675, "A");
-        this->itemVersion->SetFont("DefaultFont@20");
-        this->itemVersion->SetColor(textclr);
-        g_MenuApplication->ApplyConfigForElement("main_menu", "banner_version_text", this->itemVersion);
-        this->Add(this->itemVersion);
+
+        this->itemDetails = pu::ui::elm::TextBlock::New(100, 670, "A");
+        this->itemDetails->SetFont("DefaultFont@20");
+        this->itemDetails->SetColor(textclr);
+        g_MenuApplication->ApplyConfigForElement("main_menu", "banner_details_text", this->itemDetails);
+        this->Add(this->itemDetails);
+
         std::string font_name = "DefaultFont@" + std::to_string(menutextsz);
         this->itemsMenu = SideMenu::New(pu::ui::Color(0, 255, 120, 0xFF), cfg::GetAssetByTheme(g_Theme, "ui/Cursor.png"), cfg::GetAssetByTheme(g_Theme, "ui/Suspended.png"), cfg::GetAssetByTheme(g_Theme, "ui/Multiselect.png"), menutextx, menutexty, font_name, textclr, 294);
         this->MoveFolder("", false);
@@ -117,6 +89,34 @@ namespace ui {
 
         this->quickMenu = QuickMenu::New(cfg::GetAssetByTheme(g_Theme, "ui/QuickMenuMain.png"));
         this->Add(this->quickMenu);
+
+        // Sidebar
+        this->sideBar = pu::ui::elm::Image::New(0, 0, cfg::GetAssetByTheme(g_Theme, "ui/Sidebar.png"));
+        g_MenuApplication->ApplyConfigForElement("main_menu", "sidebar_bg", this->sideBar);
+        this->Add(this->sideBar);
+
+        this->users = ClickableImage::New(15, 10, ""); // On layout creation, no user is still selected...
+        this->users->SetOnClick(&actions::ShowUserMenu);
+        g_MenuApplication->ApplyConfigForElement("main_menu", "user_icon", this->users);
+        this->Add(this->users);
+
+        this->controller = ClickableImage::New(15, 495, cfg::GetAssetByTheme(g_Theme, "ui/ControllerIcon.png"));
+        this->controller->SetOnClick(&actions::ShowControllerSupport);
+        g_MenuApplication->ApplyConfigForElement("main_menu", "controller_icon", this->controller);
+        this->Add(this->controller);
+
+        this->settings = ClickableImage::New(15, 575, cfg::GetAssetByTheme(g_Theme, "ui/SettingsIcon.png"));
+        this->settings->SetOnClick(&actions::ShowSettingsMenu);
+        g_MenuApplication->ApplyConfigForElement("main_menu", "settings_icon", this->settings);
+        this->Add(this->settings);
+
+        this->powerIcon = ClickableImage::New(15, 655, cfg::GetAssetByTheme(g_Theme, "ui/PowerIcon.png"));
+        this->powerIcon->SetOnClick(&actions::ShowPowerMenu);
+        g_MenuApplication->ApplyConfigForElement("main_menu", "power_icon", this->powerIcon);
+        this->Add(this->powerIcon);
+
+        this->powerMenu = PowerMenu::New(cfg::GetAssetByTheme(g_Theme, "ui/QuickMenuMain.png"));
+        this->Add(this->powerMenu);
 
         this->tp = std::chrono::steady_clock::now();
 
@@ -134,7 +134,13 @@ namespace ui {
     void MenuLayout::OnMenuInput(u64 down, u64 up, u64 held, pu::ui::Touch touch_pos) {
         auto quickon = this->quickMenu->IsOn();
         this->itemsMenu->SetEnabled(!quickon);
-        if(quickon) {
+        if (quickon) {
+            return;
+        }
+
+        auto poweron = this->powerMenu->IsOn();
+        this->itemsMenu->SetEnabled(!poweron);
+        if (poweron) {
             return;
         }
 
@@ -152,25 +158,29 @@ namespace ui {
         this->timeText->SetText(curtime);
 
         auto lvl = os::GetBatteryLevel();
-        if(this->last_batterylvl != lvl) {
+
+        if (this->last_batterylvl != lvl) {
             this->last_batterylvl = lvl;
             auto lvlstr = std::to_string(lvl) + "%";
             this->batteryText->SetText(lvlstr);
         }
 
         auto ch = os::IsConsoleCharging();
-        if(this->last_charge != ch) {
+
+        if (this->last_charge != ch) {
             this->last_charge = ch;
             std::string battery_img = "ui/BatteryNormalIcon.png";
-            if(ch) {
+
+            if (ch) {
                 battery_img = "ui/BatteryChargingIcon.png";
             }
+
             this->batteryIcon->SetImage(cfg::GetAssetByTheme(g_Theme, battery_img));
         }
 
         auto ctp = std::chrono::steady_clock::now();
-        if(std::chrono::duration_cast<std::chrono::milliseconds>(ctp - this->tp).count() >= 500) {
-            if(g_MenuApplication->LaunchFailed() && !this->warnshown) {
+        if (std::chrono::duration_cast<std::chrono::milliseconds>(ctp - this->tp).count() >= 500) {
+            if (g_MenuApplication->LaunchFailed() && !this->warnshown) {
                 g_MenuApplication->CreateShowDialog(cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "app_launch"), cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "app_unexpected_error"), { cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "ok") }, true);
                 this->warnshown = true;
             }
@@ -582,13 +592,12 @@ namespace ui {
     }
 
     void MenuLayout::menu_OnSelected(u32 index) {
-        this->itemAuthor->SetVisible(true);
-        this->itemVersion->SetVisible(true);
+        this->itemDetails->SetVisible(true);
         u32 realidx = index;
-        if(this->homebrew_mode) {
-            if(index == 0) {
-                this->itemAuthor->SetVisible(false);
-                this->itemVersion->SetVisible(false);
+
+        if (this->homebrew_mode) {
+            if (index == 0) {
+                this->itemDetails->SetVisible(false);
                 this->bannerImage->SetImage(cfg::GetAssetByTheme(g_Theme, "ui/BannerHomebrew.png"));
                 this->itemName->SetText(cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "hbmenu_launch"));
             }
@@ -597,26 +606,12 @@ namespace ui {
                 auto hb = g_HomebrewRecordList[realidx];
                 auto info = cfg::GetRecordInformation(hb);
 
-                if(info.strings.name.empty()) {
-                    this->itemName->SetText(cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "unknown"));
-                }
-                else {
-                    this->itemName->SetText(info.strings.name);
-                }
+                std::string name = info.strings.name.empty() ? cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "unknown") : info.strings.name;
+                std::string author = info.strings.author.empty() ? cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "unknown") : info.strings.author;
+                std::string version = info.strings.version.empty() ? cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "unknown") : info.strings.version;
 
-                if(info.strings.author.empty()) {
-                    this->itemAuthor->SetText(cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "unknown"));
-                }
-                else {
-                    this->itemAuthor->SetText(info.strings.author);
-                }
-
-                if(info.strings.version.empty()) {
-                    this->itemVersion->SetText("0");
-                }
-                else {
-                    this->itemVersion->SetText(info.strings.version);
-                }
+                this->itemName->SetText(info.strings.name);
+                this->itemDetails->SetText(author + " - Version " + version);
 
                 this->bannerImage->SetImage(cfg::GetAssetByTheme(g_Theme, "ui/BannerHomebrew.png"));
             }
@@ -624,53 +619,41 @@ namespace ui {
         else {
             auto &folder = cfg::FindFolderByName(g_EntryList, this->curfolder);
             s32 titleidx = realidx;
-            if(this->curfolder.empty()) {
-                if(realidx >= g_EntryList.folders.size()) {
+
+            if (this->curfolder.empty()) {
+                if (realidx >= g_EntryList.folders.size()) {
                     titleidx -= g_EntryList.folders.size();
                 }
                 else {
                     auto foldr = g_EntryList.folders[realidx];
                     this->bannerImage->SetImage(cfg::GetAssetByTheme(g_Theme, "ui/BannerFolder.png"));
                     auto sz = foldr.titles.size();
-                    this->itemAuthor->SetText(std::to_string(sz) + " " + ((sz == 1) ? cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "folder_entry_single") : cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "folder_entry_mult")));
-                    this->itemVersion->SetVisible(false);
+                    this->itemDetails->SetText(std::to_string(sz) + " " + ((sz == 1) ? cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "folder_entry_single") : cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "folder_entry_mult")));
                     this->itemName->SetText(foldr.name);
                     titleidx = -1;
                 }
             }
-            if(titleidx >= 0) {
+
+            if (titleidx >= 0) {
                 auto title = folder.titles[titleidx];
                 auto info = cfg::GetRecordInformation(title);
 
-                if(info.strings.name.empty()) {
-                    this->itemName->SetText(cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "unknown"));
-                }
-                else {
-                    this->itemName->SetText(info.strings.name);
-                }
+                std::string name = info.strings.name.empty() ? cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "unknown") : info.strings.name;
+                std::string author = info.strings.author.empty() ? cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "unknown") : info.strings.author;
+                std::string version = info.strings.version.empty() ? cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "unknown") : info.strings.version;
 
-                if(info.strings.author.empty()) {
-                    this->itemAuthor->SetText(cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "unknown"));
-                }
-                else {
-                    this->itemAuthor->SetText(info.strings.author);
-                }
+                this->itemName->SetText(name);
+                this->itemDetails->SetText(author + " - Version " + version);
 
-                if(info.strings.version.empty()) {
-                    this->itemVersion->SetText("0");
-                }
-                else {
-                    this->itemVersion->SetText(info.strings.version);
-                }
-
-                if(static_cast<cfg::TitleType>(title.title_type) == cfg::TitleType::Homebrew) {
+                if (static_cast<cfg::TitleType>(title.title_type) == cfg::TitleType::Homebrew) {
                     this->bannerImage->SetImage(cfg::GetAssetByTheme(g_Theme, "ui/BannerHomebrew.png"));
                 }
                 else {
                     this->bannerImage->SetImage(cfg::GetAssetByTheme(g_Theme, "ui/BannerInstalled.png"));
                 }
             }
-            if(!this->curfolder.empty()) {
+
+            if (!this->curfolder.empty()) {
                 // This way we know we're inside a folder
                 this->bannerImage->SetImage(cfg::GetAssetByTheme(g_Theme, "ui/BannerFolder.png"));
             }
@@ -900,4 +883,7 @@ namespace ui {
         }));
     }
 
+    void MenuLayout::ShowPowerMenu() {
+        this->powerMenu->Toggle();
+    }
 }

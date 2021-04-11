@@ -28,11 +28,10 @@
     "entry_remove_ok": "削除しました。",
     "hbmenu_launch": "hbmenuを起動",
     "unknown": "不明",
-    "power_dialog": "電源オプション",
-    "power_dialog_info": "何をしたいですか？",
     "power_sleep": "スリープ",
     "power_power_off": "シャットダウン",
     "power_reboot": "再起動",
+    "power_reboot_to_payload": "Reboot to payload", // @todo: need translate
     "folder_entry_single": "エントリ",
     "folder_entry_mult": "エントリー",
     "app_launch": "タイトルを起動",

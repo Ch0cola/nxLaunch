@@ -1,9 +1,7 @@
-
 #pragma once
 #include <cfg/cfg_Config.hpp>
 
 namespace ui::actions {
-
     void ShowAboutDialog();
     void ShowSettingsMenu();
     void ShowThemesMenu();
@@ -12,6 +10,9 @@ namespace ui::actions {
     void ShowWebPage();
     void ShowHelpDialog();
     void ShowAlbumApplet();
-    void ShowPowerDialog();
-
+    void ShowPowerMenu();
+    void PowerSleep();
+    void PowerShutdown();
+    void PowerReboot();
+    void PowerRebootPayload();
 }

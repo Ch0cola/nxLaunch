@@ -6,6 +6,7 @@
 #include <ui/ui_RawData.hpp>
 #include <ui/ui_ClickableImage.hpp>
 #include <ui/ui_QuickMenu.hpp>
+#include <ui/ui_PowerMenu.hpp>
 #include <ui/ui_Actions.hpp>
 #include <cfg/cfg_Config.hpp>
 
@@ -18,25 +19,24 @@ namespace ui {
             bool last_hasconn;
             u32 last_batterylvl;
             bool last_charge;
-            pu::ui::elm::Image::Ref topMenuImage;
+            pu::ui::elm::Image::Ref sideBar;
+            pu::ui::elm::Image::Ref topBar;
             pu::ui::elm::Image::Ref connIcon;
             ClickableImage::Ref users;
             ClickableImage::Ref controller;
-            ClickableImage::Ref logo;
             pu::ui::elm::TextBlock::Ref timeText;
             pu::ui::elm::TextBlock::Ref batteryText;
             pu::ui::elm::Image::Ref batteryIcon;
             ClickableImage::Ref settings;
-            ClickableImage::Ref themes;
-            pu::ui::elm::TextBlock::Ref fwText;
+            ClickableImage::Ref powerIcon;
             SideMenu::Ref itemsMenu;
             RawData::Ref bgSuspendedRaw;
             pu::ui::elm::TextBlock::Ref itemName;
-            pu::ui::elm::TextBlock::Ref itemAuthor;
-            pu::ui::elm::TextBlock::Ref itemVersion;
+            pu::ui::elm::TextBlock::Ref itemDetails;
             pu::ui::elm::Image::Ref bannerImage;
             ClickableImage::Ref menuToggle;
             QuickMenu::Ref quickMenu;
+            PowerMenu::Ref powerMenu;
             std::string curfolder;
             std::chrono::steady_clock::time_point tp;
             bool warnshown;
@@ -87,7 +87,7 @@ namespace ui {
             void HandleMultiselectMoveToFolder(const std::string &folder);
             void StopMultiselect();
             void DoTerminateApplication();
-
+            void ShowPowerMenu();
     };
 
 }

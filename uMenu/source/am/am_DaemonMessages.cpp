@@ -1,7 +1,6 @@
 #include <am/am_DaemonMessages.hpp>
 
 namespace {
-
     Result daemonPrivateInitialize(Service *srv) {
         u64 pid_placeholder = 0;
         return serviceDispatchIn(srv, 0, pid_placeholder,
@@ -35,14 +34,10 @@ namespace {
         UL_ASSERT(daemonPrivateGetMessage(&g_DaemonPrivateService, &msg));
         return msg;
     }
-
 }
 
 namespace am {
-
     namespace {
-
-        Mutex g_StopLock = EmptyMutex;
         Mutex g_ReceiverLock = EmptyMutex;
         bool g_Initialized = false;
         std::atomic_bool g_ReceiveThreadShouldStop = false;

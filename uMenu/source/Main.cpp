@@ -48,6 +48,7 @@ namespace {
         am::RegisterLibAppletHomeButtonDetection();
         ui::MenuApplication::RegisterHomeButtonDetection();
         ui::QuickMenu::RegisterHomeButtonDetection();
+        ui::PowerMenu::RegisterHomeButtonDetection();
 
         // Initialize uDaemon message handling
         UL_ASSERT(am::InitializeDaemonMessageHandler());

@@ -11,6 +11,7 @@
 #include <os/os_HomeMenu.hpp>
 #include <fs/fs_Stdio.hpp>
 #include <net/net_Service.hpp>
+#include <utils/reboot_payload.h>
 
 extern ui::MenuApplication::Ref g_MenuApplication;
 extern cfg::Config g_Config;
@@ -127,31 +128,30 @@ namespace ui::actions {
         g_MenuApplication->CloseWithFadeOut();
     }
 
-    void ShowPowerDialog() {
-        auto msg = os::GeneralChannelMessage::Invalid;
-
-        auto sopt = g_MenuApplication->CreateShowDialog(cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "power_dialog"), cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "power_dialog_info"), { cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "power_sleep"), cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "power_power_off"), cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "power_reboot"), cfg::GetLanguageString(g_Config.main_lang, g_Config.default_lang, "cancel") }, true);
-        if(sopt == 0) {
-            msg = os::GeneralChannelMessage::Sleep;
-        }
-        else if(sopt == 1) {
-            msg = os::GeneralChannelMessage::Shutdown;
-        }
-        else if(sopt == 2) {
-            msg = os::GeneralChannelMessage::Reboot;
-        }
-
-        if(msg != os::GeneralChannelMessage::Invalid) {
-            // Fade out on all cases
-            g_MenuApplication->FadeOut();
-            
-            auto smsg = os::SystemAppletMessage::Create(msg);
-            os::PushSystemAppletMessage(smsg);
-            svcSleepThread(1'500'000'000ul);
-
-            // When we get back after sleep we will do a cool fade in, whereas with the other options the console will be already off/rebooted
-            g_MenuApplication->FadeIn();
-        }
+    void ShowPowerMenu() {
+        auto &menu_lyt = g_MenuApplication->GetMenuLayout();
+        menu_lyt->ShowPowerMenu();
     }
 
+    void PowerSleep() {
+        auto smsg = os::SystemAppletMessage::Create(os::GeneralChannelMessage::Sleep);
+        os::PushSystemAppletMessage(smsg);
+        svcSleepThread(1'500'000'000ul);
+    }
+
+    void PowerShutdown() {
+        auto smsg = os::SystemAppletMessage::Create(os::GeneralChannelMessage::Shutdown);
+        os::PushSystemAppletMessage(smsg);
+        svcSleepThread(1'500'000'000ul);
+    }
+
+    void PowerReboot() {
+        auto smsg = os::SystemAppletMessage::Create(os::GeneralChannelMessage::Reboot);
+        os::PushSystemAppletMessage(smsg);
+        svcSleepThread(1'500'000'000ul);
+    }
+
+    void PowerRebootPayload() {
+        reboot_to_payload("sdmc:/atmosphere/reboot_payload.bin");
+    }
 }
